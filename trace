@@ -4,9 +4,7 @@ public class trace {
     public static void main(String[] args) {
         try {
             System.out.print("Enter the IP Address to be Traced: ");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String ip = reader.readLine();
-
+            String ip = sc.nextLine();
             ProcessBuilder processBuilder = new ProcessBuilder("tracert", ip); //"tracepath"
             Process process = processBuilder.start();
 
