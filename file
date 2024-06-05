@@ -1,0 +1,28 @@
+import java.io.BufferedInputStream; import java.io.File; import java.io.FileInputStream; import java.io.OutputStream; import java.net.ServerSocket; import java.net.Socket;
+public class Sender {
+public static void main(String[] args) throws Exception {
+ServerSocket serverSocket = new ServerSocket(5000);
+System.out.println("Waiting for connection...");
+Socket socket = serverSocket.accept();
+System.out.println("Accepted connection: " + socket);
+File transferFile = new File("cprogram.c");
+Byte[ ] byteArray = new byte[(int) transferFile.length()];
+FileInputStream fin = new FileInputStream(transferFile); BufferedInputStream bin = new BufferedInputStream(fin); bin.read(byteArray, 0, byteArray.length); OutputStream os = socket.getOutputStream(); System.out.println("Sending File..."); os.write(byteArray, 0, byteArray.length); os.flush();
+System.out.println("File sent successfully."); socket.close(); serverSocket.close();
+}
+}
+
+RECEIVER:
+import java.io.BufferedOutputStream; import java.io.FileOutputStream; import java.io.InputStream; import java.net.Socket;
+class Receiver {
+public static void main(String[] args) throws Exception {
+// Open your connection to a server, at port 15123
+Socket socket = new Socket("127.0.0.1", 5000);
+InputStream is = socket.getInputStream();
+// Enter the destination file name which is to be transferred
+FileOutputStream fos = new FileOutputStream("cpgm.c"); BufferedOutputStream bos = new BufferedOutputStream(fos); byte[] byteArray = new byte[8192]; // or any buffer size you prefer int bytesRead; while ((bytesRead = is.read(byteArray)) != -1) {
+bos.write(byteArray, 0, bytesRead);
+}
+System.out.println("File received successfully."); bos.close(); socket.close();
+}
+}

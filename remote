@@ -1,0 +1,44 @@
+import java.io.*; import java.net.ServerSocket; import java.net.Socket; import java.util.Scanner;
+class RemoteServer {
+public static void main(String[] args) throws IOException {
+Scanner scanner = new Scanner(System.in);
+System.out.print("Enter the Port Address: "); int port = Integer.parseInt(scanner.nextLine());
+try (ServerSocket serverSocket = new ServerSocket(port)) {
+System.out.println("Server is Ready To Receive a Command.");
+System.out.println("Waiting...");
+try (Socket clientSocket = serverSocket.accept()) {
+if (clientSocket.isConnected()) {
+System.out.println("Client Socket is Connected Successfully.");
+}
+InputStream in = clientSocket.getInputStream();
+OutputStream out = clientSocket.getOutputStream();
+BufferedReader reader = new BufferedReader(new InputStreamReader(in)); PrintWriter writer = new PrintWriter(out, true);
+String cmd = reader.readLine();
+System.out.println("Received command: " + cmd);
+ProcessBuilder processBuilder = new ProcessBuilder(cmd.split("\\s+")); Process process = processBuilder.start();
+try (BufferedReader commandOutput = new BufferedReader(new
+InputStreamReader(process.getInputStream()))) {
+String outputLine; while ((outputLine = commandOutput.readLine()) != null) { writer.println(outputLine);
+}
+}
+} }}}
+
+
+import java.io.BufferedReader; import java.io.InputStreamReader; import java.io.OutputStream; import java.io.PrintWriter; import java.net.Socket;
+public class RemoteClient {
+public static void main(String[] args) throws Exception {
+BufferedReader buf = new BufferedReader(new InputStreamReader(System.in)); System.out.print("Enter the Port Address: "); int port = Integer.parseInt(buf.readLine());
+Socket socket = new Socket("localhost", port); if (socket.isConnected()) {
+System.out.println("Server Socket is Connected Successfully.");
+OutputStream ou = socket.getOutputStream();
+BufferedReader buf1 = new BufferedReader(new
+InputStreamReader(socket.getInputStream()));
+PrintWriter pr = new PrintWriter(ou);
+System.out.print("Enter the Command to be Executed: ");
+String cmd = buf.readLine();
+pr.println(cmd); pr.flush(); String str = buf1.readLine();
+System.out.println("Output from server: " + str);
+pr.close(); buf1.close(); ou.close(); socket.close();
+}
+}
+}
