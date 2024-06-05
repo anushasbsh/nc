@@ -1,8 +1,6 @@
 
-Stuffing
-
 import java.util.Scanner;
-public class bitstuff {
+public class stuff {
 public static void main(String[] args) {
 Scanner scanner = new Scanner(System.in);
 String n = scanner.next();
@@ -12,47 +10,16 @@ for (int i = 0; i < n.length(); i++) {
 char ch = n.charAt(i);
 if (ch == '1') {
 c++;
+s+=ch;
 if (c < 5) {
-s += ch;
-} else {
-s += '0';
+s += "0";
+c = 0;
 }
 } else {
 s += ch;
 c = 0;
 }
 }
-s = "0110" + s + "0110";
 System.out.println(s);
 }
 }
-
-Destuffing
-
-import java.util.Scanner;
-
-public class destuff {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter stuffed data:");
-        String stuffedData = scanner.nextLine(); // Read the entire line
-
-        // Rest of your code remains unchanged
-        String destuffedData = "";
-
-        for (int i = 3; i < stuffedData.length() - 3; i++) {
-            char ch = stuffedData.charAt(i);
-            destuffedData += ch;
-
-            if (ch == '1') {
-                char nextChar = stuffedData.charAt(i + 1);
-                if (nextChar == '0') {
-                    i++;
-                }
-            }
-        }
-
-        System.out.println("Destuffed data: " + destuffedData);
-    }
-}
-
